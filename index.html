@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>REVIRALL | REBOOT 2025</title>
+    <!-- Favicon: Interlocking Diamond Logo (Blue/Grey) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L95 45L70 70L25 25L50 0Z' fill='%233b82f6'/%3E%3Cpath d='M50 100L5 55L30 30L75 75L50 100Z' fill='%234b5563'/%3E%3C/svg%3E">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&family=Zen+Old+Mincho:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'void-black': '#050505',
+              'stark-white': '#F0F0F0',
+              'viral-cyan': '#00E0FF', // Changed from #00FFC2 to Turquoise Blue
+              'deep-grey': '#1a1a1a',
+              'glass-black': 'rgba(10, 10, 10, 0.7)',
+            },
+            fontFamily: {
+              mono: ['"Courier Prime"', 'Courier', 'monospace'],
+              sans: ['"Noto Sans JP"', 'sans-serif'],
+              serif: ['"Zen Old Mincho"', 'serif'],
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 12s linear infinite',
+              'glitch': 'glitch 1s linear infinite',
+              'ripple': 'ripple 3s cubic-bezier(0, 0.2, 0.8, 1) infinite',
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'marquee': 'marquee 30s linear infinite',
+              'marquee-reverse': 'marqueeReverse 30s linear infinite',
+            },
+            keyframes: {
+              ripple: {
+                '0%': { transform: 'scale(0)', opacity: '0.8', borderWidth: '1px' },
+                '100%': { transform: 'scale(4)', opacity: '0', borderWidth: '0px' },
+              },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              marquee: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-50%)' },
+              },
+              marqueeReverse: {
+                '0%': { transform: 'translateX(-50%)' },
+                '100%': { transform: 'translateX(0%)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #050505;
+        color: #f0f0f0;
+        cursor: none;
+        overflow-x: hidden;
+      }
+      /* Noise overlay */
+      .noise-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+      /* Vignette */
+      .vignette-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9997;
+        pointer-events: none;
+        background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.8) 100%);
+      }
+      /* Scanlines */
+      .scanlines-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9996;
+        pointer-events: none;
+        background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 50%);
+        background-size: 100% 4px;
+        opacity: 0.5;
+      }
+
+      /* Hide scrollbar */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+      .glitch-text { position: relative; display: inline-block; }
+      .glitch-text::before, .glitch-text::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.8;
+      }
+      .glitch-text::before {
+        color: #00E0FF; /* Turquoise Blue */
+        z-index: -1;
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        transform: translate(-2px, 0);
+        animation: glitch 3s infinite linear alternate-reverse;
+      }
+      .glitch-text::after {
+        color: #ff00ff;
+        z-index: -2;
+        clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+        transform: translate(2px, 0);
+        animation: glitch 2s infinite linear alternate-reverse;
+      }
+      
+      /* Smooth text reveal */
+      .reveal-text {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 1s ease-out;
+      }
+      .reveal-text.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      /* Vertical text utility */
+      .vertical-rl {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+      }
+    </style>
+
+<!-- Vite Entry Point -->
+  <script type="module" crossorigin src="/assets/index-BTt0Ebvz.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="noise-bg"></div>
+    <div class="vignette-bg"></div>
+    <div class="scanlines-bg"></div>
+</body>
+</html>
