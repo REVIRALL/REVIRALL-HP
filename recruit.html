@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+    <title>RECRUIT | REVIRALL — 採用情報</title>
+    <meta name="description" content="合同会社リバイラル 採用情報。事業拡大と組織強化に伴い、事務・営業事務のコアメンバーを募集します。" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L95 45L70 70L25 25L50 0Z' fill='%233b82f6'/%3E%3Cpath d='M50 100L5 55L30 30L75 75L50 100Z' fill='%234b5563'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;400;700&family=Zen+Old+Mincho:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'void-black': '#050505',
+              'stark-white': '#F0F0F0',
+              'viral-cyan': '#00E0FF',
+              'deep-grey': '#1a1a1a',
+              'glass-black': 'rgba(10, 10, 10, 0.7)',
+              'signal-red': '#FF3B3B',
+            },
+            fontFamily: {
+              mono: ['"Courier Prime"', 'Courier', 'monospace'],
+              sans: ['"Noto Sans JP"', 'sans-serif'],
+              serif: ['"Zen Old Mincho"', 'serif'],
+            },
+            animation: {
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'spin-slow': 'spin 12s linear infinite',
+              'glitch': 'glitch 1s linear infinite',
+              'ripple': 'ripple 3s cubic-bezier(0, 0.2, 0.8, 1) infinite',
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'marquee': 'marquee 30s linear infinite',
+            },
+            keyframes: {
+              ripple: {
+                '0%': { transform: 'scale(0)', opacity: '0.8', borderWidth: '1px' },
+                '100%': { transform: 'scale(4)', opacity: '0', borderWidth: '0px' },
+              },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              marquee: {
+                '0%': { transform: 'translateX(0%)' },
+                '100%': { transform: 'translateX(-50%)' },
+              },
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body {
+        background-color: #050505;
+        color: #f0f0f0;
+        overflow-x: hidden;
+        font-family: 'Noto Sans JP', sans-serif;
+      }
+
+      /* Noise overlay */
+      .noise-bg {
+        position: fixed; top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        z-index: 9998; pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+      .vignette-bg {
+        position: fixed; top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        z-index: 9997; pointer-events: none;
+        background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.8) 100%);
+      }
+      .scanlines-bg {
+        position: fixed; top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        z-index: 9996; pointer-events: none;
+        background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.1) 50%);
+        background-size: 100% 4px;
+        opacity: 0.5;
+      }
+
+      /* Glitch text */
+      .glitch-text { position: relative; display: inline-block; }
+      .glitch-text::before, .glitch-text::after {
+        content: attr(data-text);
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        opacity: 0.8;
+      }
+      .glitch-text::before {
+        color: #00E0FF;
+        z-index: -1;
+        clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+        transform: translate(-2px, 0);
+        animation: glitch 3s infinite linear alternate-reverse;
+      }
+      .glitch-text::after {
+        color: #ff00ff;
+        z-index: -2;
+        clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+        transform: translate(2px, 0);
+        animation: glitch 2s infinite linear alternate-reverse;
+      }
+
+      /* Reveal */
+      .reveal-text { opacity: 0; transform: translateY(20px); transition: all 0.9s ease-out; }
+      .reveal-text.visible { opacity: 1; transform: translateY(0); }
+
+      /* Vertical text */
+      .vertical-rl { writing-mode: vertical-rl; text-orientation: upright; }
+
+      /* Section divider line */
+      .section-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(0,224,255,0.5), transparent);
+      }
+
+      /* Number tile */
+      .num-tile {
+        font-family: 'Courier Prime', monospace;
+        color: #00E0FF;
+        letter-spacing: 0.1em;
+      }
+
+      /* Card */
+      .frame-card {
+        background: rgba(10,10,10,0.6);
+        border: 1px solid rgba(240,240,240,0.08);
+        backdrop-filter: blur(6px);
+        transition: border-color 0.4s ease, transform 0.4s ease;
+      }
+      .frame-card:hover {
+        border-color: rgba(0,224,255,0.6);
+        transform: translateY(-2px);
+      }
+
+      /* Marquee bar */
+      .marquee-track { display: inline-flex; white-space: nowrap; }
+
+      /* Table */
+      .rev-table { width: 100%; border-collapse: collapse; font-family: 'Courier Prime', monospace; }
+      .rev-table th, .rev-table td {
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid rgba(240,240,240,0.08);
+        text-align: left;
+        font-size: 0.95rem;
+      }
+      .rev-table th {
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        color: rgba(240,240,240,0.5);
+        text-transform: uppercase;
+        font-weight: 400;
+      }
+      .rev-table tr.target td { color: #00E0FF; font-weight: 700; }
+      .rev-table tr.target td:first-child::before {
+        content: '▲ ';
+        color: #00E0FF;
+      }
+
+      /* CTA button */
+      .cta-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.1rem 2.4rem;
+        background: transparent;
+        border: 1px solid #00E0FF;
+        color: #00E0FF;
+        font-family: 'Courier Prime', monospace;
+        letter-spacing: 0.25em;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        overflow: hidden;
+        transition: color 0.3s ease;
+      }
+      .cta-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: #00E0FF;
+        transform: translateX(-101%);
+        transition: transform 0.4s cubic-bezier(0.7,0,0.3,1);
+        z-index: 0;
+      }
+      .cta-btn > * { position: relative; z-index: 1; }
+      .cta-btn:hover { color: #050505; }
+      .cta-btn:hover::before { transform: translateX(0); }
+
+      /* Bullet */
+      .biz-bullet { position: relative; padding-left: 1.5rem; }
+      .biz-bullet::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0.7em;
+        width: 0.6rem; height: 1px;
+        background: #00E0FF;
+      }
+
+      /* Step */
+      .step-num {
+        font-family: 'Courier Prime', monospace;
+        color: #00E0FF;
+        font-size: 0.75rem;
+        letter-spacing: 0.3em;
+      }
+
+      /* Header link */
+      .top-link {
+        font-family: 'Courier Prime', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        color: rgba(240,240,240,0.6);
+        transition: color 0.3s ease;
+      }
+      .top-link:hover { color: #00E0FF; }
+
+      @media (max-width: 640px) {
+        .hero-title { font-size: 4rem !important; }
+        .hero-sub { font-size: 1rem !important; }
+      }
+    </style>
+  </head>
+  <body class="font-sans">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-5 flex justify-between items-center bg-gradient-to-b from-void-black/90 to-transparent">
+      <a href="/" class="flex items-center gap-3">
+        <svg viewBox="0 0 100 100" class="w-7 h-7" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 0L95 45L70 70L25 25L50 0Z" fill="#00E0FF"/>
+          <path d="M50 100L5 55L30 30L75 75L50 100Z" fill="#F0F0F0"/>
+        </svg>
+        <span class="font-mono text-xs tracking-[0.3em] text-stark-white">REVIRALL</span>
+      </a>
+      <nav class="flex items-center gap-6 md:gap-10">
+        <a href="/" class="top-link hidden md:inline">[ HOME ]</a>
+        <a href="#apply" class="top-link">[ APPLY ]</a>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="relative min-h-screen flex items-center px-6 md:px-12 pt-24 pb-16">
+      <!-- Vertical decorative text -->
+      <div class="hidden md:flex absolute top-1/2 right-8 -translate-y-1/2 vertical-rl text-stark-white/30 font-mono text-xs tracking-[0.5em]">
+        REC—2026 // CORE MEMBER WANTED
+      </div>
+
+      <!-- Big BG number -->
+      <div class="absolute -left-2 bottom-4 md:bottom-12 font-serif text-[18vw] md:text-[14vw] leading-none text-stark-white/[0.04] select-none pointer-events-none">
+        2026
+      </div>
+
+      <div class="relative z-10 max-w-6xl">
+        <div class="flex items-center gap-4 mb-8">
+          <div class="w-2 h-2 bg-viral-cyan animate-pulse"></div>
+          <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan">// NOW HIRING — 採用情報 v1.0</p>
+        </div>
+
+        <h1 class="hero-title font-serif text-7xl md:text-[10rem] leading-[0.9] mb-8">
+          <span class="glitch-text" data-text="RECRUIT">RECRUIT</span>
+        </h1>
+        <p class="hero-sub font-sans text-lg md:text-2xl text-stark-white/80 max-w-3xl leading-relaxed mb-10">
+          事業拡大と組織強化に伴い、<br class="md:hidden"/>
+          <span class="text-viral-cyan">事務・営業事務</span>のコアメンバーを募集します。<br/>
+          2023年の設立以来、急成長を続ける弊社で、組織の内製化を支える重要なポジションをお任せします。
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+          <a href="#apply" class="cta-btn">
+            <span>応募する / Apply Now</span>
+            <span>→</span>
+          </a>
+          <a href="#about" class="font-mono text-xs tracking-[0.3em] text-stark-white/60 hover:text-viral-cyan transition-colors">
+            ↓ SCROLL TO READ MORE
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="overflow-hidden border-y border-stark-white/10 py-4 bg-deep-grey/40">
+      <div class="marquee-track animate-marquee font-mono text-xs md:text-sm tracking-[0.3em] text-stark-white/50">
+        <span class="px-8">// 事業4期目</span><span class="px-8 text-viral-cyan">▲ FY2026 TARGET 3億円</span>
+        <span class="px-8">// 池袋オフィス</span><span class="px-8">// 2026.09 新オフィス移転</span>
+        <span class="px-8 text-viral-cyan">▲ コアメンバー募集</span><span class="px-8">// 正社員 / 業務委託</span>
+        <span class="px-8">// 事業4期目</span><span class="px-8 text-viral-cyan">▲ FY2026 TARGET 3億円</span>
+        <span class="px-8">// 池袋オフィス</span><span class="px-8">// 2026.09 新オフィス移転</span>
+        <span class="px-8 text-viral-cyan">▲ コアメンバー募集</span><span class="px-8">// 正社員 / 業務委託</span>
+      </div>
+    </div>
+
+    <!-- 01 ABOUT -->
+    <section id="about" class="relative px-6 md:px-12 py-24 md:py-36">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-text mb-12">
+          <p class="step-num mb-4">// SECTION 01</p>
+          <h2 class="font-serif text-4xl md:text-6xl leading-tight">
+            私たちについて<br/>
+            <span class="text-stark-white/30 text-2xl md:text-4xl">— ABOUT US</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-5 gap-12 mb-20">
+          <div class="md:col-span-3 reveal-text">
+            <p class="text-lg leading-loose text-stark-white/85">
+              合同会社リバイラルは <span class="text-viral-cyan font-bold">2023年3月</span> に設立。<br/>
+              少数精鋭の体制ながら、着実に実績を積み上げ、現在は事業 <span class="text-viral-cyan">4期目</span> を迎えています。
+            </p>
+            <p class="text-lg leading-loose text-stark-white/85 mt-6">
+              これまでは外部パートナー中心の運営でしたが、<br/>
+              さらなる成長とクオリティ向上のため、<span class="text-viral-cyan">組織の内製化</span> を進めています。
+            </p>
+          </div>
+          <div class="md:col-span-2 reveal-text">
+            <div class="frame-card p-6">
+              <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-4">// COMPANY</p>
+              <dl class="space-y-3 text-sm">
+                <div class="flex justify-between border-b border-stark-white/10 pb-2"><dt class="text-stark-white/60">設立</dt><dd>2023年3月</dd></div>
+                <div class="flex justify-between border-b border-stark-white/10 pb-2"><dt class="text-stark-white/60">事業期</dt><dd>4期目</dd></div>
+                <div class="flex justify-between border-b border-stark-white/10 pb-2"><dt class="text-stark-white/60">所在地</dt><dd>池袋オフィス</dd></div>
+                <div class="flex justify-between"><dt class="text-stark-white/60">フェーズ</dt><dd class="text-viral-cyan">内製化推進</dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <!-- 売上推移 -->
+        <div class="reveal-text">
+          <div class="flex items-end justify-between mb-6">
+            <h3 class="font-serif text-2xl md:text-3xl">売上推移 <span class="text-stark-white/30 font-mono text-base">/ REVENUE</span></h3>
+            <p class="font-mono text-xs tracking-[0.2em] text-viral-cyan">▲ 3x GROWTH</p>
+          </div>
+
+          <table class="rev-table">
+            <thead>
+              <tr><th>YEAR / 年度</th><th>REVENUE / 売上高</th><th class="hidden md:table-cell">GROWTH</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>2023年度（1期目）</td><td class="num-tile">¥100,000,000</td><td class="hidden md:table-cell text-stark-white/40 font-mono">— BASE</td></tr>
+              <tr><td>2024年度（2期目）</td><td class="num-tile">¥160,000,000</td><td class="hidden md:table-cell text-stark-white/60 font-mono">+60%</td></tr>
+              <tr><td>2025年度（3期目）</td><td class="num-tile">¥200,000,000</td><td class="hidden md:table-cell text-stark-white/60 font-mono">+25%</td></tr>
+              <tr class="target"><td>2026年度（今期目標）</td><td class="num-tile">¥300,000,000</td><td class="hidden md:table-cell font-mono">+50%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- 02 募集要項 -->
+    <section class="relative px-6 md:px-12 py-24 md:py-36">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-text mb-12">
+          <p class="step-num mb-4">// SECTION 02</p>
+          <h2 class="font-serif text-4xl md:text-6xl leading-tight">
+            募集要項<br/>
+            <span class="text-stark-white/30 text-2xl md:text-4xl">— POSITION</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+          <div class="frame-card p-8 reveal-text">
+            <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-3">// JOB TITLE</p>
+            <p class="font-serif text-2xl md:text-3xl mb-2">事務・営業事務</p>
+            <p class="text-stark-white/60 text-sm">正社員 / 業務委託</p>
+          </div>
+          <div class="frame-card p-8 reveal-text">
+            <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-3">// MISSION</p>
+            <p class="font-serif text-xl md:text-2xl leading-relaxed">
+              バックオフィス業務を中心に、<br/>顧客対応からデータ管理まで幅広くお任せします。
+            </p>
+          </div>
+        </div>
+
+        <!-- 職務内容 -->
+        <div class="mb-16 reveal-text">
+          <h3 class="font-serif text-2xl md:text-3xl mb-6">職務内容 <span class="text-stark-white/30 font-mono text-base">/ DUTIES</span></h3>
+          <div class="grid md:grid-cols-2 gap-x-12 gap-y-5">
+            <div class="biz-bullet">
+              <p class="font-bold text-viral-cyan mb-1">WEB面談対応</p>
+              <p class="text-stark-white/70 text-sm">顧客へのヒアリング・ご案内</p>
+            </div>
+            <div class="biz-bullet">
+              <p class="font-bold text-viral-cyan mb-1">公式LINEレスポンス</p>
+              <p class="text-stark-white/70 text-sm">お問い合わせに対する適切なカスタマー対応</p>
+            </div>
+            <div class="biz-bullet">
+              <p class="font-bold text-viral-cyan mb-1">データ管理</p>
+              <p class="text-stark-white/70 text-sm">スプレッドシートを用いた情報整理・進捗管理</p>
+            </div>
+            <div class="biz-bullet">
+              <p class="font-bold text-viral-cyan mb-1">運営支援</p>
+              <p class="text-stark-white/70 text-sm">組織運営に付随する事務・雑務全般</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 求める人物像 -->
+        <div class="reveal-text">
+          <h3 class="font-serif text-2xl md:text-3xl mb-6">求める人物像 <span class="text-stark-white/30 font-mono text-base">/ PROFILE</span></h3>
+          <div class="space-y-4">
+            <div class="frame-card p-6 flex gap-5 items-start">
+              <span class="num-tile text-2xl">01</span>
+              <div>
+                <p class="font-bold mb-1">ハキハキ喋れる方</p>
+                <p class="text-stark-white/70 text-sm">会社の顔として、明るく明快なコミュニケーションができる方を重視します。</p>
+              </div>
+            </div>
+            <div class="frame-card p-6 flex gap-5 items-start">
+              <span class="num-tile text-2xl">02</span>
+              <div>
+                <p class="font-bold mb-1">長期的に貢献いただける方</p>
+                <p class="text-stark-white/70 text-sm">組織を一緒に作っていく意欲のある方を求めています。</p>
+              </div>
+            </div>
+            <div class="frame-card p-6 flex gap-5 items-start">
+              <span class="num-tile text-2xl">03</span>
+              <div>
+                <p class="font-bold mb-1">主体性を持って業務に取り組める方</p>
+                <p class="text-stark-white/70 text-sm">未経験の場合でも、自ら学び、適応しようとする姿勢を正当に評価します。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- 03 勤務条件・待遇 -->
+    <section class="relative px-6 md:px-12 py-24 md:py-36 bg-deep-grey/20">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-text mb-12">
+          <p class="step-num mb-4">// SECTION 03</p>
+          <h2 class="font-serif text-4xl md:text-6xl leading-tight">
+            勤務条件・待遇<br/>
+            <span class="text-stark-white/30 text-2xl md:text-4xl">— CONDITIONS</span>
+          </h2>
+        </div>
+
+        <!-- 給与 -->
+        <div class="frame-card p-8 md:p-10 mb-8 reveal-text">
+          <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-4">// SALARY</p>
+          <div class="flex flex-col md:flex-row md:items-end gap-3 md:gap-6 mb-6">
+            <p class="font-serif text-3xl md:text-5xl">年俸</p>
+            <p class="num-tile text-3xl md:text-5xl">¥3,000,000 — ¥6,000,000</p>
+          </div>
+          <ul class="grid md:grid-cols-2 gap-x-8 gap-y-3 text-sm text-stark-white/80">
+            <li class="biz-bullet">経験・能力を考慮し決定いたします。</li>
+            <li class="biz-bullet">営業としてのクローザー経験や、マーケティングの実務経験をお持ちの方は優遇いたします。</li>
+            <li class="biz-bullet"><span class="text-viral-cyan font-bold">昇給</span>：半年ごとの人事考査により決定。</li>
+            <li class="biz-bullet"><span class="text-viral-cyan font-bold">賞与</span>：基本なし。</li>
+          </ul>
+        </div>
+
+        <!-- 勤務地 + 勤務時間 -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+          <div class="frame-card p-8 reveal-text">
+            <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-4">// LOCATION</p>
+            <p class="font-serif text-2xl mb-4">弊社池袋オフィス</p>
+            <ul class="space-y-3 text-sm text-stark-white/80">
+              <li class="biz-bullet">当初はオフィス出社にて業務を習得していただきます。慣れてきた後はリモートワークの相談も可能です。</li>
+              <li class="biz-bullet">
+                <span class="inline-block px-2 py-0.5 bg-viral-cyan text-void-black text-[10px] tracking-widest font-mono mr-2">IMPORTANT</span>
+                <span class="text-stark-white"><span class="text-viral-cyan font-bold">2026年9月</span>に池袋の新オフィス（ビルワンフロア）へ移転予定です。</span>
+                <span class="block mt-1 text-stark-white/60">移転後はグループ会社との共同拠点となり、組織の一体感を高めるため「全員出社形態」への移行を計画しています。</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="frame-card p-8 reveal-text">
+            <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-4">// SCHEDULE</p>
+            <dl class="space-y-4 text-sm">
+              <div class="flex justify-between items-center border-b border-stark-white/10 pb-3">
+                <dt class="text-stark-white/60 tracking-widest font-mono text-xs">勤務時間</dt>
+                <dd class="num-tile text-lg">10:00 — 18:00</dd>
+              </div>
+              <div class="flex justify-between items-center border-b border-stark-white/10 pb-3">
+                <dt class="text-stark-white/60 tracking-widest font-mono text-xs">休日</dt>
+                <dd>完全週休2日制（土日）</dd>
+              </div>
+              <div>
+                <dt class="text-stark-white/60 tracking-widest font-mono text-xs mb-1">年次有給休暇</dt>
+                <dd>15日<span class="text-stark-white/50 text-xs ml-2">（夏季休暇1日、年末年始休暇3日分を含む）</span></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <!-- 福利厚生 -->
+        <div class="frame-card p-8 reveal-text">
+          <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-4">// BENEFITS</p>
+          <ul class="grid md:grid-cols-3 gap-x-8 gap-y-4 text-sm">
+            <li class="biz-bullet">社会保険完備<span class="text-stark-white/50 text-xs ml-1">（正社員の場合）</span></li>
+            <li class="biz-bullet">交通費支給</li>
+            <li class="biz-bullet">試用期間：1ヶ月</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- 04 選考フロー -->
+    <section class="relative px-6 md:px-12 py-24 md:py-36">
+      <div class="max-w-6xl mx-auto">
+        <div class="reveal-text mb-16">
+          <p class="step-num mb-4">// SECTION 04</p>
+          <h2 class="font-serif text-4xl md:text-6xl leading-tight">
+            選考フロー<br/>
+            <span class="text-stark-white/30 text-2xl md:text-4xl">— FLOW</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="frame-card p-8 reveal-text">
+            <p class="num-tile text-5xl mb-4">01</p>
+            <p class="font-mono text-xs tracking-[0.3em] text-stark-white/40 mb-2">STEP 01</p>
+            <p class="font-serif text-2xl">書類選考</p>
+          </div>
+          <div class="frame-card p-8 reveal-text">
+            <p class="num-tile text-5xl mb-4">02</p>
+            <p class="font-mono text-xs tracking-[0.3em] text-stark-white/40 mb-2">STEP 02</p>
+            <p class="font-serif text-2xl">対面面談 <span class="text-stark-white/50 text-base">（1回）</span></p>
+          </div>
+          <div class="frame-card p-8 reveal-text border-viral-cyan/40">
+            <p class="num-tile text-5xl mb-4">03</p>
+            <p class="font-mono text-xs tracking-[0.3em] text-viral-cyan mb-2">STEP 03</p>
+            <p class="font-serif text-2xl text-viral-cyan">内定</p>
+          </div>
+        </div>
+
+        <p class="mt-16 text-stark-white/70 leading-loose text-sm md:text-base reveal-text border-l-2 border-viral-cyan pl-5">
+          現在は代表・共同経営者を含めた少人数のチームです。少数精鋭ながらアットホームな雰囲気で、ビシッと働く時間とリラックスして話す時間のメリハリを大切にしています。<br/>
+          <span class="text-viral-cyan font-bold mt-2 inline-block">新しいステージへ向かうリバイラルで、あなたの力を貸してください。</span>
+        </p>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- APPLY CTA -->
+    <section id="apply" class="relative px-6 md:px-12 py-24 md:py-40 overflow-hidden">
+      <!-- Decorative ripples -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-viral-cyan rounded-full animate-ripple"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-viral-cyan rounded-full animate-ripple" style="animation-delay: 1s"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-viral-cyan rounded-full animate-ripple" style="animation-delay: 2s"></div>
+
+      <div class="relative z-10 max-w-3xl mx-auto text-center">
+        <p class="step-num mb-6">// APPLY NOW</p>
+        <h2 class="font-serif text-5xl md:text-7xl leading-tight mb-6">
+          <span class="glitch-text" data-text="JOIN US.">JOIN US.</span>
+        </h2>
+        <p class="text-stark-white/80 text-lg mb-10 leading-relaxed">
+          ご応募・お問い合わせは、下記メールアドレスまで直接ご連絡ください。<br/>
+          <span class="text-stark-white/50 text-sm">履歴書・職務経歴書をご送付いただけるとスムーズです。</span>
+        </p>
+
+        <a
+          href="mailto:info@revirall.jp?subject=%E3%80%90%E6%8E%A1%E7%94%A8%E5%BF%9C%E5%8B%9F%E3%80%91%E5%90%88%E5%90%8C%E4%BC%9A%E7%A4%BE%E3%83%AA%E3%83%90%E3%82%A4%E3%83%A9%E3%83%AB&body=%E5%90%88%E5%90%8C%E4%BC%9A%E7%A4%BE%E3%83%AA%E3%83%90%E3%82%A4%E3%83%A9%E3%83%AB%20%E6%8E%A1%E7%94%A8%E3%81%94%E6%8B%85%E5%BD%93%E8%80%85%E6%A7%98%0A%0A%E6%8E%A1%E7%94%A8%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E6%8B%9D%E8%A6%8B%E3%81%97%E3%80%81%E3%81%94%E5%BF%9C%E5%8B%9F%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82%0A%0A%E2%97%8F%20%E3%81%8A%E5%90%8D%E5%89%8D%EF%BC%9A%0A%E2%97%8F%20%E3%81%94%E9%80%A3%E7%B5%A1%E5%85%88%EF%BC%88%E9%9B%BB%E8%A9%B1%EF%BC%89%EF%BC%9A%0A%E2%97%8F%20%E5%BF%9C%E5%8B%9F%E5%8C%BA%E5%88%86%EF%BC%88%E6%AD%A3%E7%A4%BE%E5%93%A1%20%2F%20%E6%A5%AD%E5%8B%99%E5%A7%94%E8%A8%97%EF%BC%89%EF%BC%9A%0A%E2%97%8F%20%E7%B0%A1%E5%8D%98%E3%81%AA%E8%87%AA%E5%B7%B1PR%EF%BC%9A%0A%0A%E5%B1%A5%E6%AD%B4%E6%9B%B8%E3%83%BB%E8%81%B7%E5%8B%99%E7%B5%8C%E6%AD%B4%E6%9B%B8%E3%82%92%E6%B7%BB%E4%BB%98%E3%81%84%E3%81%9F%E3%81%A0%E3%81%91%E3%82%8B%E3%81%A8%E3%82%B9%E3%83%A0%E3%83%BC%E3%82%BA%E3%81%A7%E3%81%99%E3%80%82%0A%0A%E3%81%A9%E3%81%86%E3%81%9E%E3%82%88%E3%82%8D%E3%81%97%E3%81%8F%E3%81%8A%E9%A1%98%E3%81%84%E3%81%84%E3%81%9F%E3%81%97%E3%81%BE%E3%81%99%E3%80%82"
+          class="cta-btn inline-flex"
+        >
+          <span>info@revirall.jp</span>
+          <span>→</span>
+        </a>
+
+        <p class="mt-8 font-mono text-xs tracking-[0.3em] text-stark-white/40">
+          // CLICK TO OPEN YOUR MAIL CLIENT
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative px-6 md:px-12 py-12 border-t border-stark-white/10">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="flex items-center gap-3">
+          <svg viewBox="0 0 100 100" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 0L95 45L70 70L25 25L50 0Z" fill="#00E0FF"/>
+            <path d="M50 100L5 55L30 30L75 75L50 100Z" fill="#F0F0F0"/>
+          </svg>
+          <p class="font-mono text-xs tracking-[0.3em] text-stark-white/60">合同会社リバイラル / REVIRALL LLC</p>
+        </div>
+        <div class="flex gap-6 font-mono text-xs tracking-[0.3em] text-stark-white/40">
+          <a href="/" class="hover:text-viral-cyan transition-colors">[ HOME ]</a>
+          <a href="mailto:info@revirall.jp" class="hover:text-viral-cyan transition-colors">[ CONTACT ]</a>
+        </div>
+      </div>
+      <p class="max-w-6xl mx-auto mt-6 font-mono text-[10px] tracking-[0.2em] text-stark-white/30">
+        © 2026 REVIRALL LLC. ALL RIGHTS RESERVED. // RECRUIT PAGE v1.0
+      </p>
+    </footer>
+
+    <!-- Background overlays -->
+    <div class="noise-bg"></div>
+    <div class="vignette-bg"></div>
+    <div class="scanlines-bg"></div>
+
+    <script>
+      // Reveal on scroll
+      const reveal = document.querySelectorAll('.reveal-text');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      reveal.forEach(el => io.observe(el));
+    </script>
+  </body>
+</html>
