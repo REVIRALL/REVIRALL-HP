@@ -152,6 +152,99 @@
         writing-mode: vertical-rl;
         text-orientation: upright;
       }
+
+      /* === RECRUIT CTA (overlay above React, below FX) === */
+      .recruit-cta {
+        position: fixed;
+        z-index: 9000;
+        cursor: pointer;
+        font-family: 'Courier Prime', Courier, monospace;
+        text-decoration: none;
+        transition: transform 0.4s cubic-bezier(0.7,0,0.3,1), color 0.3s ease, background-color 0.3s ease;
+      }
+
+      /* Desktop: vertical tab pinned to right edge */
+      .recruit-cta-desktop {
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        padding: 1.6rem 0.6rem;
+        background: rgba(5,5,5,0.7);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0,224,255,0.5);
+        border-right: none;
+        color: #00E0FF;
+        font-size: 0.72rem;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+      .recruit-cta-desktop::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background: #00E0FF;
+        border-radius: 50%;
+        animation: pulse 1.4s ease-in-out infinite;
+        box-shadow: 0 0 8px #00E0FF;
+      }
+      .recruit-cta-desktop:hover {
+        background: #00E0FF;
+        color: #050505;
+        transform: translateY(-50%) translateX(-4px);
+      }
+      .recruit-cta-desktop:hover::before {
+        background: #050505;
+        box-shadow: none;
+      }
+      .recruit-cta-desktop .recruit-arrow {
+        font-size: 0.9rem;
+        letter-spacing: 0;
+      }
+
+      /* Mobile: floating button bottom-right */
+      .recruit-cta-mobile {
+        display: none;
+        bottom: 1.25rem;
+        right: 1.25rem;
+        padding: 0.85rem 1.15rem;
+        background: rgba(5,5,5,0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid #00E0FF;
+        color: #00E0FF;
+        font-size: 0.7rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        align-items: center;
+        gap: 0.55rem;
+        box-shadow: 0 4px 24px rgba(0,224,255,0.25);
+      }
+      .recruit-cta-mobile::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background: #00E0FF;
+        border-radius: 50%;
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      .recruit-cta-mobile:hover, .recruit-cta-mobile:active {
+        background: #00E0FF;
+        color: #050505;
+      }
+      .recruit-cta-mobile:hover::before, .recruit-cta-mobile:active::before {
+        background: #050505;
+      }
+
+      @media (max-width: 768px) {
+        .recruit-cta-desktop { display: none; }
+        .recruit-cta-mobile { display: inline-flex; }
+      }
     </style>
 
 <!-- Vite Entry Point -->
@@ -159,6 +252,17 @@
 </head>
   <body>
     <div id="root"></div>
+
+    <!-- RECRUIT CTA (renders above React app, below FX overlays) -->
+    <a href="/recruit.html" class="recruit-cta recruit-cta-desktop" aria-label="採用情報ページへ">
+      <span>RECRUIT // 採用情報</span>
+      <span class="recruit-arrow">←</span>
+    </a>
+    <a href="/recruit.html" class="recruit-cta recruit-cta-mobile" aria-label="採用情報ページへ">
+      <span>RECRUIT</span>
+      <span>→</span>
+    </a>
+
     <div class="noise-bg"></div>
     <div class="vignette-bg"></div>
     <div class="scanlines-bg"></div>
