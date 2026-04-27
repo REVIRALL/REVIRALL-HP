@@ -1,0 +1,29 @@
+# Netlify deploy configuration for REVIRALL-HP
+# Static site — no build step required.
+
+[build]
+  publish = "."
+  command = ""
+
+# Cache static assets aggressively, but keep HTML fresh
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Friendly URL: /recruit redirects to /recruit.html
+[[redirects]]
+  from = "/recruit"
+  to = "/recruit.html"
+  status = 301
+  force = true
